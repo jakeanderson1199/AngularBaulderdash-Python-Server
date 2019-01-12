@@ -51,7 +51,7 @@ def postAnswer(owner_name,player_name):
             game.turn.answers.append(person.answer)
 
     
-    return make_response()
+    return make_response(jsonify(todict(game)))
 
 
 @app.route("/games/<owner_name>/players/<player_name>", methods=['POST'])
