@@ -11,6 +11,8 @@ app = Flask(__name__)
 
 CORS(app)
 
+
+
 @app.route("/")
 def home():
     return "Mom is a noob"
@@ -25,16 +27,20 @@ def home():
 
 @app.route("/games/<owner_name>", methods=['POST'])
 def postGame(owner_name):
+    ##global game
+    game = Game()
+    
     game.owner_name = owner_name
     game.new_turn()
+    games.append(game)
     content = todict(game)
-   
+    print(game.owner_name)
     return make_response(jsonify(content))
     
 @app.route("/games")
 def getGames():
-    games = []
-    games.append(game)
+    ##games = []
+    ##games.append(game) 
 
     return make_response(jsonify(todict(games)))
 
@@ -43,7 +49,10 @@ def getGames():
 def postAnswer(owner_name,player_name):
     content = request.get_json()
     answer = content['answer']
-    
+    for g in games:
+        if g.owner_name == owner_name:
+            game = g
+
     for person in game.players:
         if person.name == player_name:
             person.answer = Answer(person.id)
@@ -56,7 +65,9 @@ def postAnswer(owner_name,player_name):
 
 @app.route("/games/<owner_name>/players/<player_name>", methods=['POST'])
 def postPlayer(owner_name,player_name):
-    
+    for g in games:
+        if g.owner_name == owner_name:
+            game = g
     
     for person in game.players:
         if person.name == player_name:
@@ -85,6 +96,10 @@ def postVotes(owner_name,player_name):
     content = request.get_json()
     answer_id = content['answer_id']
     
+    for g in games:
+        if g.owner_name == owner_name:
+            game = g
+    
     for person in game.players:
         if person.name == player_name:
             person.vote = answer_id
@@ -99,10 +114,16 @@ def postVotes(owner_name,player_name):
 
 @app.route("/games/<owner_name>/players")
 def getPlayers(owner_name):
+    for g in games:
+        if g.owner_name == owner_name:
+            game = g
     return make_response(jsonify(todict(game.players)))
 
 @app.route("/games/<owner_name>")
 def getGame(owner_name):
+    for g in games:
+        if g.owner_name == owner_name:
+            game = g
     return make_response(jsonify(todict(game)))
 
 """ @app.route("/games/<owner_name>/get_points")
