@@ -1,4 +1,4 @@
-from flask import Flask,render_template,jsonify, make_response,json,request
+from flask import Flask,render_template,jsonify, make_response,json,request, send_from_directory
 from datetime import datetime
 import re
 from game_class import *
@@ -7,7 +7,7 @@ from to_dict import *
 from Answer_class import Answer
 from flask_cors import CORS
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 
 CORS(app)
 
@@ -15,12 +15,12 @@ CORS(app)
 
 @app.route("/")
 def home():
-    return "Mom is a noob"
+    return send_from_directory('client', 'index.html')
 
-
-
-    
-
+#####  Uncomment when running prod angular app
+#@app.route('/<path>')
+#def send_js(path):
+#    return send_from_directory('client', path)
 
 
 
