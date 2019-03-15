@@ -94,7 +94,7 @@ def postPlayer(owner_name,player_name):
 @app.route("/games/<owner_name>/players/<player_name>/vote", methods=['POST'])
 def postVotes(owner_name,player_name):
     content = request.get_json()
-    answer_id = content['answer_id']
+    answer_id = content['vote']
     
     for g in games:
         if g.owner_name == owner_name:
@@ -106,7 +106,7 @@ def postVotes(owner_name,player_name):
             game.turn.votes.append(person.vote)
 
     
-    return make_response()
+    return make_response(jsonify(todict(game)))
 
 ##@app.route("/games/<owner_name>/players/<player_name>/get_votes")
 ##def getVotes(owner_name,player_name):
