@@ -24,4 +24,7 @@ class Game:
     def new_turn(self):
         self.index += 1
         self.turn = Turn(self.question_list[self.index])
+        for p in self.players:
+            p.answer = None
+            p.vote = None
 games = []

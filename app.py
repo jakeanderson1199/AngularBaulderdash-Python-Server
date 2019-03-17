@@ -137,10 +137,10 @@ def getGame(owner_name):
 """ @app.route("/games/<owner_name>/get_points")
 def getPoints(owner_name): """
 
-##@app.route("/games/<owner_name>/turns", methods=['POST'])
-##def nextTurn(owner_name):
-##    for g in games:
-##        if g.owner_name == owner_name:
-##            game = g
-##    game.new_turn
-##    return make_response()
+@app.route("/games/<owner_name>/turns", methods=['POST'])
+def nextTurn(owner_name):
+    for g in games:
+        if g.owner_name == owner_name:
+            game = g
+    game.new_turn()
+    return make_response(jsonify(todict(game)))
