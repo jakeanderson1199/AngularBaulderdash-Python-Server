@@ -58,6 +58,8 @@ def postAnswer(owner_name,player_name):
             person.answer = Answer(person.id)
             person.answer.text = answer
             game.turn.answers.append(person.answer)
+    
+        
 
     
     return make_response(jsonify(todict(game)))
@@ -75,7 +77,7 @@ def postPlayer(owner_name,player_name):
             response.status_code = 400
             print("Attempted to add duplicate player names {}".format(player_name))
             return response
-    new_player = player(player_name,None,None,len(game.players) + 1)
+    new_player = player(player_name,0,None,len(game.players) + 1)
 
 
     game.players.append(new_player)
@@ -104,6 +106,12 @@ def postVotes(owner_name,player_name):
         if person.name == player_name:
             person.vote = answer_id
             game.turn.votes.append(person.vote)
+    for person in game.players:
+        if person.vote['answer'] == game.turn.current_question.real_answer: ##TODO somehow change person.vote.answer so that it gets the text of the persons answer//Need to transfer the game class "votes" into the server so that you can access it to assign points.
+            person.points += 2
+        for vote in game.turn.votes:
+            if person.answer.text == vote['answer']:
+                person.points += 1
 
     
     return make_response(jsonify(todict(game)))
@@ -128,3 +136,11 @@ def getGame(owner_name):
 
 """ @app.route("/games/<owner_name>/get_points")
 def getPoints(owner_name): """
+
+##@app.route("/games/<owner_name>/turns", methods=['POST'])
+##def nextTurn(owner_name):
+##    for g in games:
+##        if g.owner_name == owner_name:
+##            game = g
+##    game.new_turn
+##    return make_response()
