@@ -25,7 +25,7 @@ def home():
 
 
 
-@app.route("/games/<owner_name>", methods=['POST'])
+@app.route("/api/games/<owner_name>", methods=['POST'])
 def postGame(owner_name):
     ##global game
     game = Game()
@@ -37,7 +37,7 @@ def postGame(owner_name):
     print(game.owner_name)
     return make_response(jsonify(content))
     
-@app.route("/games")
+@app.route("/api/games")
 def getGames():
     ##games = []
     ##games.append(game) 
@@ -45,7 +45,7 @@ def getGames():
     return make_response(jsonify(todict(games)))
 
 
-@app.route("/games/<owner_name>/players/<player_name>/answer", methods=['POST'])
+@app.route("/api/games/<owner_name>/players/<player_name>/answer", methods=['POST'])
 def postAnswer(owner_name,player_name):
     content = request.get_json()
     answer = content['answer']
@@ -65,7 +65,7 @@ def postAnswer(owner_name,player_name):
     return make_response(jsonify(todict(game)))
 
 
-@app.route("/games/<owner_name>/players/<player_name>", methods=['POST'])
+@app.route("/api/games/<owner_name>/players/<player_name>", methods=['POST'])
 def postPlayer(owner_name,player_name):
     for g in games:
         if g.owner_name == owner_name:
@@ -93,7 +93,7 @@ def postPlayer(owner_name,player_name):
     ##return make_response(jsonify(todict(game.answers)))
 
 
-@app.route("/games/<owner_name>/players/<player_name>/vote", methods=['POST'])
+@app.route("/api/games/<owner_name>/players/<player_name>/vote", methods=['POST'])
 def postVotes(owner_name,player_name):
     content = request.get_json()
     answer_id = content['vote']
@@ -120,14 +120,14 @@ def postVotes(owner_name,player_name):
 ##def getVotes(owner_name,player_name):
     ##return make_response(jsonify(todict(game.votes)))
 
-@app.route("/games/<owner_name>/players")
+@app.route("/api/games/<owner_name>/players")
 def getPlayers(owner_name):
     for g in games:
         if g.owner_name == owner_name:
             game = g
     return make_response(jsonify(todict(game.players)))
 
-@app.route("/games/<owner_name>")
+@app.route("/api/games/<owner_name>")
 def getGame(owner_name):
     for g in games:
         if g.owner_name == owner_name:
@@ -137,7 +137,7 @@ def getGame(owner_name):
 """ @app.route("/games/<owner_name>/get_points")
 def getPoints(owner_name): """
 
-@app.route("/games/<owner_name>/turns", methods=['POST'])
+@app.route("/api/games/<owner_name>/turns", methods=['POST'])
 def nextTurn(owner_name):
     for g in games:
         if g.owner_name == owner_name:
