@@ -6,6 +6,8 @@ from player_class import *
 from to_dict import *
 from Answer_class import Answer
 from flask_cors import CORS
+from waitress import serve
+import sys
 
 app = Flask(__name__, static_url_path='')
 
@@ -13,9 +15,14 @@ CORS(app)
 
 
 
-@app.route("/")
-def home():
-    return send_from_directory('client', 'index.html')
+#@app.route("/")
+#def home():
+#    return send_from_directory('client', 'index.html')
+
+###@app.route("/client/<path:path>")
+##def clientPath(path):
+   ## return send_from_directory('client', path)
+
 
 #####  Uncomment when running prod angular app
 #@app.route('/<path>')
@@ -144,3 +151,20 @@ def nextTurn(owner_name):
             game = g
     game.new_turn()
     return make_response(jsonify(todict(game)))
+
+@app.route('/', defaults={'path': 'index.html'})
+@app.route('/<path:path>')
+@app.route('/<string:path>')
+def catch_all(path):
+    print('catch all for path '+ path)
+    try:
+        resp = send_from_directory('client', path)
+    except:
+        print('exception for path ' + path)
+        path = 'index.html'
+        resp = send_from_directory('client', path)
+    
+    return resp
+
+##serve comes after all routes defined
+serve(app, host = '0.0.0.0', port= 8080)
